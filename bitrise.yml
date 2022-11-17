@@ -10,6 +10,9 @@ stages:
   test:
     workflows:
     - primary: {}
+    - primary: {}
+    - primary: {}
+    - primary: {}
 workflows:
   primary:
     steps:
