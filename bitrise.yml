@@ -32,20 +32,6 @@ workflows:
               -H "Authorization: $BITRISE_TOKEN" | jq ".stages[0].workflows | map(.external_id == \"$BITRISE_BUILD_SLUG\") | index(true)"
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - script@1:
-        title: Simple clone
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
-            set -o pipefail
-            # debug log
-            set -x
-
-            # write your script here
-            git clone $GIT_REPOSITORY_URL $BITRISE_SOURCE_DIR
     - git-clone@6: {}
     - deploy-to-bitrise-io@2: {}
 meta:
