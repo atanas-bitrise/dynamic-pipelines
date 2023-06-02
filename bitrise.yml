@@ -16,9 +16,6 @@ stages:
 workflows:
   primary:
     steps:
-    - activate-ssh-key@4:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6: {}
     - script@1:
         title: Get Pipeline Information
         inputs:
@@ -36,8 +33,16 @@ workflows:
               "https://api.bitrise.io/v0.1/apps/$BITRISE_APP_SLUG/pipelines/$BITRISEIO_PIPELINE_ID" \
               -H "accept: application/json" \
               -H "Authorization: $BITRISE_TOKEN" | jq ".stages[0].workflows | map(.external_id == \"$BITRISE_BUILD_SLUG\") | index(true)"
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6: {}
     - deploy-to-bitrise-io@2: {}
 meta:
   bitrise.io:
     stack: osx-xcode-13.3.x
     machine_type_id: g2.4core
+app:
+  envs:
+  - opts:
+      is_expand: false
+    GIT_REPOSITORY_URL: git@github.com:atanas-bitrise/dynamic-demo.git
